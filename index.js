@@ -29,8 +29,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () =>
-  console.log(
-    `Express started on http://localhost:${port}; ` +
-      `press Ctrl-C to terminate.`
-  )
+  console.log(`Express started on ${port}; ` + `press Ctrl-C to terminate.`)
 );
