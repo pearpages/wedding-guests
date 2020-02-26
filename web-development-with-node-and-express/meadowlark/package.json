@@ -1,0 +1,28 @@
+{
+  "name": "meadowlark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "portfinder": "^1.0.25",
+    "puppeteer": "^2.1.1"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --watch",
+    "coverage": "jest --coverage",
+    "init-eslint": "eslint --init",
+    "lint": "eslint index.js lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
