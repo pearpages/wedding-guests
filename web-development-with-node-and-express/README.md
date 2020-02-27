@@ -692,11 +692,11 @@ s3.putObject({
 ### Database Persistence
 
 - MongoDB (have instead focused on concurrency to scale performance -MongoDB: The Definitive Guide (O’Reilly)-)
-- PostgreSQL
+- PostgreSQL (ORM)
 
 #### MongoDB
 
 - mLab online service
-- mongoose (object document mapper (ODM). The most popular ODM for MongoDB is Mongoose.)
+- mongoose (object document mapper (**ODM**). The most popular ODM for MongoDB is Mongoose.)
 
 ---
