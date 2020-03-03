@@ -700,3 +700,142 @@ s3.putObject({
 - mongoose (object document mapper (ODM). The most popular ODM for MongoDB is Mongoose.)
 
 ---
+
+## REST APIs and JSON
+
+_Web service_ is a general term that means any application programming interface (API) that’s accessible over HTTP.
+
+The acronym REST stands for representational state transfer, and the grammatically troubling RESTful is used as an adjective to describe a web service that satisfies the principles of REST.
+
+The basics are that REST is a stateless connection between a client and a server. The formal definition of REST also specifies that the service can be cached and that services can be layered (that is, when you use a REST API, there may be other REST APIs beneath it).
+
+JSON hass better JavaScript support, and it’s a simpler, more compact format.
+
+```bash
+# It has become a standard to use POST for creating something, and PUT for updating (or modifying) something.
+
+GET /api/vacations
+# Retrieves vacations
+
+GET /api/vacation/:sku
+# Returns a vacation by its SKU
+
+POST /api/vacation/:sku/notify-when-in-season
+# Takes email as a querystring parameter and adds a notification listener for the specified vacation
+
+DELETE /api/vacation/:sku
+# Requests the deletion of a vacation; takes email (the person requesting the deletion) and notes as querystring parameters
+```
+
+[RESTful API Design - POST vs PUT vs PATCH](https://blog.fullstacktraining.com/restful-api-design-post-vs-put-vs-patch/)
+
+To avoid excessively long URLs, I recommend using the request body to pass large blocks of data (for example, the deletion request notes).
+
+[JSON:API (A SPECIFICATION FOR BUILDING APIS IN JSON)](https://jsonapi.org/)
+
+### API Error Reporting
+
+- Catastrophic errors (the request will time out.)
+- Recoverable server errors ( A 500 response code is appropriate in this situation.)
+- Client errors ( The most useful response codes in this case are 404 (Not Found), 400 (Bad Request), and 401 (Unauthorized).)
+
+### Client Errors
+
+The most useful response codes in this case are 404 (Not Found), 400 (Bad Request), and 401 (Unauthorized).
+
+Additionally, the response body should contain an explanation of the specifics of the error. If you want to go above and beyond, the error message would even contain a link to documentation. Note that if the user requests a list of things and there’s nothing to return, this is not an error condition. It’s appropriate to simply return an empty list.
+
+## Cross-Origin Resource Sharing
+
+Specifically, the protocol, domain, and port must match. This makes it impossible for your API to be used by another site, which is where cross-origin resource sharing (CORS) comes in.
+
+CORS allows you to lift this restriction on a case-by-case basis, even allowing you to list which domains specifically are allowed to access the script.
+
+CORS is implemented through the **Access-Control-Allow-Origin header**.
+
+The easiest way to implement it in an Express application is to use the cors package (npm install cors). To enable CORS for your application, use this:
+
+```js
+const cors = require("cors");
+
+app.use(cors());
+```
+
+In our case, we want to expose our entire API (but only the API), so we’re going to restrict CORS to paths starting with /api:
+
+```js
+const cors = require("cors");
+
+app.use("/api", cors());
+```
+
+## Testing the API
+
+There are ways around this, such as the excellent application **Postman**. However, whether or not you use such a utility, it’s good to have automated tests.
+
+Before we write tests for our API, we need a way to actually call a REST API. For that, we’ll be using a Node package called **node-fetch**, which replicates the browser’s fetch API:
+
+```js
+npm install --save-dev node-fetch@2.6.0
+```
+
+```js
+const fetch = require("node-fetch");
+
+const baseUrl = "http://localhost:3000";
+
+const _fetch = async (method, path, body) => {
+  body = typeof body === "string" ? body : JSON.stringify(body);
+  const headers = { "Content-Type": "application/json" };
+  const res = await fetch(baseUrl + path, { method, body, headers });
+  if (res.status < 200 || res.status > 299)
+    throw new Error(`API returned status ${res.status}`);
+  return res.json();
+};
+
+describe("API tests", () => {
+  test("GET /api/vacations", async () => {
+    const vacations = await _fetch("get", "/api/vacations");
+    expect(vacations.length).not.toBe(0);
+    const vacation0 = vacations[0];
+    expect(vacation0.name).toMatch(/\w/);
+    expect(typeof vacation0.price).toBe("number");
+  });
+
+  test("GET /api/vacation/:sku", async () => {
+    const vacations = await _fetch("get", "/api/vacations");
+    expect(vacations.length).not.toBe(0);
+    const vacation0 = vacations[0];
+    const vacation = await _fetch("get", "/api/vacation/" + vacation0.sku);
+    expect(vacation.name).toBe(vacation0.name);
+  });
+
+  test("POST /api/vacation/:sku/notify-when-in-season", async () => {
+    const vacations = await _fetch("get", "/api/vacations");
+    expect(vacations.length).not.toBe(0);
+    const vacation0 = vacations[0];
+    // at this moment, all we can do is make sure the HTTP request is successful
+    await _fetch(
+      "post",
+      `/api/vacation/${vacation0.sku}/notify-when-in-season`,
+      { email: "test@meadowlarktravel.com" }
+    );
+  });
+
+  test("DELETE /api/vacation/:id", async () => {
+    const vacations = await _fetch("get", "/api/vacations");
+    expect(vacations.length).not.toBe(0);
+    const vacation0 = vacations[0];
+    // at this moment, all we can do is make sure the HTTP request is successful
+    await _fetch("delete", `/api/vacation/${vacation0.sku}`);
+  });
+});
+```
+
+One is that we are relying on the API being already started and running on port 3000.
+
+Second, this test relies on data already being present in our API.
+
+You might have scripts that set up and seed a test database, attach the API to it, and tear it down for every test run.
+
+## Using Express to Prove an API
