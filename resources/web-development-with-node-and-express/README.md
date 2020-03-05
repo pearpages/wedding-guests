@@ -839,3 +839,27 @@ Second, this test relies on data already being present in our API.
 You might have scripts that set up and seed a test database, attach the API to it, and tear it down for every test run.
 
 ## Using Express to Prove an API
+
+Express is quite capable of providing an API. There are various npm modules available that provide helpful functionality (see connect-rest and json-api, for example), but I find that Express is perfectly capable out of the box, and we’ll be sticking with a pure Express implementation.
+
+```js
+exports.getVacationsApi = async (req, res) => {
+  const vacations = await db.getVacations({ available: true });
+  res.json(vacations);
+};
+
+exports.getVacationBySkuApi = async (req, res) => {
+  const vacation = await db.getVacationBySku(req.params.sku);
+  res.json(vacation);
+};
+
+exports.addVacationInSeasonListenerApi = async (req, res) => {
+  await db.addVacationInSeasonListener(req.params.sku, req.body.email);
+  res.json({ message: "success" });
+};
+
+exports.requestDeleteVacationApi = async (req, res) => {
+  const { email, notes } = req.body;
+  res.status(500).json({ message: "not yet implemented" });
+};
+```

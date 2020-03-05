@@ -1,13 +1,14 @@
 {
   "name": "wedding-guests",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a really cool app",
   "main": "index.js",
   "engines": {
     "node": "12.x"
   },
   "scripts": {
-    "start": "node index.js"
+    "dev": "nodemon -r dotenv/config index.js",
+    "start": "node -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

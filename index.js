@@ -1,4 +1,5 @@
-require("dotenv").config();
+const packageJson = require("./package.json");
+const VERSION = packageJson.version;
 const express = require("express");
 
 const app = express();
@@ -7,7 +8,7 @@ const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.type("text/plain");
-  res.send("Meadowlark Travel");
+  res.send("Wedding backend is up. Version: " + VERSION);
 });
 
 app.get("/about", (req, res) => {
