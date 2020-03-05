@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 
 const app = express();
@@ -7,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.type("text/plain");
-  res.send("Meadowlark Travel");
+  res.send("Meadowlark Travel, new version 2.0. Port: " + process.env.PORT);
 });
 
 app.get("/about", (req, res) => {
