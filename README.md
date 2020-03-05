@@ -33,3 +33,7 @@ app.post('/test', (req, res) => {
 ## Email Validation trhough regex
 
 + [Email Address Regular Expression That 99.99% Works. Disagree? ](https://emailregex.com/)
+
+## Express CORS
+
++ [cors](https://expressjs.com/en/resources/middleware/cors.html)

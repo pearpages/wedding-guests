@@ -2,6 +2,7 @@ const packageJson = require("./package.json");
 const VERSION = packageJson.version;
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const connection = process.env.MONGODB_URI;
 
 mongoose.connect(connection, {
@@ -32,6 +33,27 @@ const Contact = mongoose.model("Contact", {
 
 const app = express();
 app.use(express.json());
+const whiteList = [
+  "http://127.0.0.1",
+  "https://127.0.0.1",
+  "http://localhost",
+  "https://localhost",
+  "https://stage.martapere.com",
+  "https://martapere.com"
+];
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (
+      !origin ||
+      whiteList.some(whitelisted => origin.startsWith(whitelisted))
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+};
+app.use(cors(corsOptions));
 
 const port = process.env.PORT || 3000;
 
