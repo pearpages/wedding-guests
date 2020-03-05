@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Pere",
+    "email": "pere@gmail.com",
+    "phone": "+348584355",
+    "message": "I like your site"
+  },
+  {
+    "name": "Joan",
+    "email": "joan.dominguez@yahoo.es",
+    "phone": "",
+    "message": "Do not call me!!"
+  },
+  {
+    "name": "Marcos",
+    "email": "marcos@marcos.co.uk",
+    "phone": "+4445676234",
+    "message": "Random stuff"
+  },
+  {
+    "name": "Alfons",
+    "email": "a.cool@people.com",
+    "phone": "",
+    "message": "Forget about me"
+  },
+  {
+    "name": "Peppe",
+    "email": "peppe@pizza.it",
+    "phone": "+143564786",
+    "message": "I like pizza!"
+  },
+  {
+    "name": "Peter",
+    "email": "p.kentish@m.co.uk",
+    "phone": "",
+    "message": "duh"
+  }
+]
