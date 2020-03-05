@@ -3,6 +3,7 @@ const VERSION = packageJson.version;
 const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
@@ -11,9 +12,9 @@ app.get("/", (req, res) => {
   res.send("Wedding backend is up. Version: " + VERSION);
 });
 
-app.get("/about", (req, res) => {
-  res.type("text/plain");
-  res.send("About Meadowlark Travel");
+app.post("/contact", (req, res) => {
+  res.type("application/json");
+  res.send(req.body);
 });
 
 app.use((req, res) => {
