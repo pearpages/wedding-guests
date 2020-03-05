@@ -41,10 +41,15 @@ The primary reason for moving away from the relational model is to make **scalin
 > #### Namespace
 > By concatenating a database name with a collection in that database you can get a fully qualified collection name, which is called a namespace. For instance, if you are using the *blog.posts collection* in the cms database, the namespace of that collection would be *cms.blog.posts*.
 
-### Starting the Server
+### Installing and starting the Server
 
 ```bash
-mongod
+brew tap mongodb/brew
+brew install mongodb-community@4.2
+# brew services start mongodb-community@4.2 # as a service
+mongod --config /usr/local/etc/mongod.conf --fork # as a process
+ps aux | grep -v grep | grep mongod
+mongo
 ```
 
 It is important to create the data directory ```(e.g., mkdir -p /data/db/)``` and to make sure your user has permission to write to the directory before starting MongoDB.
