@@ -1,6 +1,34 @@
 const packageJson = require("./package.json");
 const VERSION = packageJson.version;
 const express = require("express");
+const mongoose = require("mongoose");
+const connection = process.env.MONGODB_URI;
+
+mongoose.connect(connection, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+function validateEmail(email) {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+const Contact = mongoose.model("Contact", {
+  name: { type: String, required: true },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    validate: {
+      validator: validateEmail,
+      message: props => `${props.value} is not a valid email!`
+    }
+  },
+  phone: { type: String },
+  message: { type: String, required: true }
+});
 
 const app = express();
 app.use(express.json());
@@ -12,9 +40,16 @@ app.get("/", (req, res) => {
   res.send("Wedding backend is up. Version: " + VERSION);
 });
 
-app.post("/contact", (req, res) => {
+app.post("/contact", async (req, res) => {
   res.type("application/json");
-  res.send(req.body);
+  const data = new Contact(req.body);
+  try {
+    const response = await data.save();
+    res.send(response);
+  } catch (e) {
+    res.status(400);
+    res.send(e);
+  }
 });
 
 app.use((req, res) => {
@@ -27,7 +62,7 @@ app.use((err, req, res, next) => {
   console.error(err.message);
   res.type("text/plain");
   res.status(500);
-  res.send("500 - Server Error");
+  res.send(err.message);
 });
 
 app.listen(port, () =>
