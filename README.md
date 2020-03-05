@@ -29,3 +29,7 @@ app.post('/test', (req, res) => {
   console.log(content);
 })();
 ```
+
+## Email Validation trhough regex
+
++ [Email Address Regular Expression That 99.99% Works. Disagree? ](https://emailregex.com/)
