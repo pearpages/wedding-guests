@@ -1,6 +1,6 @@
 {
   "name": "wedding-guests",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a really cool app",
   "main": "index.js",
   "engines": {
