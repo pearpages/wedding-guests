@@ -36,7 +36,7 @@ const RSVP = mongoose.model("RSVP", {
   partner: { type: String, required: true },
   partnerName: { type: String },
   comments: { type: String },
-  foot: { type: String }
+  food: { type: String }
 });
 
 const app = express();
