@@ -31,6 +31,13 @@ const Contact = mongoose.model("Contact", {
   message: { type: String, required: true }
 });
 
+const RSVP = mongoose.model("RSVP", {
+  name: { type: String, required: true },
+  partner: { type: String, required: true },
+  partnerName: { type: String },
+  comments: { type: String }
+});
+
 const app = express();
 app.use(express.json());
 const whiteList = [
@@ -65,6 +72,18 @@ app.get("/", (req, res) => {
 app.post("/contact", async (req, res) => {
   res.type("application/json");
   const data = new Contact(req.body);
+  try {
+    const response = await data.save();
+    res.send(response);
+  } catch (e) {
+    res.status(400);
+    res.send(e);
+  }
+});
+
+app.post("/rsvp", async (req, res) => {
+  res.type("application/json");
+  const data = new RSVP(req.body);
   try {
     const response = await data.save();
     res.send(response);
