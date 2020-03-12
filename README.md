@@ -37,3 +37,9 @@ app.post('/test', (req, res) => {
 ## Express CORS
 
 + [cors](https://expressjs.com/en/resources/middleware/cors.html)
+
+## Email with mailgun account
+
+```
+"mailgun-js": "^0.22.0"
+```
