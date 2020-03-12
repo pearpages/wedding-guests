@@ -4,7 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const connection = process.env.MONGODB_URI;
-// const { sendMail } = require("./email");
+const { sendMail } = require("./email");
 
 mongoose.connect(connection, {
   useNewUrlParser: true,
@@ -77,11 +77,11 @@ app.post("/contact", async (req, res) => {
   try {
     const response = await data.save();
     res.send(response);
-    // await sendMail({
-    //   to: data.email,
-    //   subject: "Gracias por tu mensaje",
-    //   html: `<p>Gracias por tu mensaje:</p> <pre>${data.message}</pre>`
-    // });
+    await sendMail({
+      to: data.email,
+      subject: "Gracias por tu mensaje",
+      html: `<p>Gracias por tu mensaje:</p> <pre>${data.message}</pre>`
+    });
   } catch (e) {
     res.status(400);
     res.send(e);
@@ -94,12 +94,12 @@ app.post("/rsvp", async (req, res) => {
   try {
     const response = await data.save();
     res.send(response);
-    // await sendMail({
-    //   from: "RSVP casament <do-not-reply@hola.martapere.com>",
-    //   to: "pere@soms.cat, marta@yahoo.es",
-    //   subject: "RSVP del Casament",
-    //   html: `<pre>${data}</pre>`
-    // });
+    await sendMail({
+      from: "RSVP casament <do-not-reply@hola.martapere.com>",
+      to: "pere@soms.cat, marta@yahoo.es",
+      subject: "RSVP del Casament",
+      html: `<pre>${data}</pre>`
+    });
   } catch (e) {
     res.status(400);
     res.send(e);
